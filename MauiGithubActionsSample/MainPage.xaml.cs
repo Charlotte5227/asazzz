@@ -1,4 +1,4 @@
-namespace WarRandomApp;
+namespace MauiGithubActionsSample;
 
 public partial class MainPage : ContentPage
 {
