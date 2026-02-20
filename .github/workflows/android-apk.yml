@@ -22,11 +22,10 @@ jobs:
         run: dotnet workload install maui --ignore-failed-sources
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore ./MauiGithubActionsSample/MauiGithubActionsSample.csproj
 
-      # ★ ここは “あなたの .csproj のパス” に必ず合わせてください
       - name: Publish (APK)
-        run: dotnet publish .MauiGithubActionsSample/MauiGithubActionsSample.csproj -c Release -f net10.0-android /p:AndroidPackageFormat=apk
+        run: dotnet publish ./MauiGithubActionsSample/MauiGithubActionsSample.csproj -c Release -f net10.0-android /p:AndroidPackageFormat=apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
