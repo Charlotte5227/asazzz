@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="WarRandomApp.MainPage"
+    x:Class="MauiGithubActionsSample.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:WarRandomApp"
+    xmlns:local="clr-namespace:MauiGithubActionsSample"
     BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}">
 
     <ContentPage.BindingContext>
         <local:MainViewModel />
     </ContentPage.BindingContext>
+
+    <!-- 以下はそのままでOK -->
 
     <Grid RowDefinitions="Auto,*,*,Auto" ColumnDefinitions="*,*"
           Padding="12" RowSpacing="10" ColumnSpacing="10">
