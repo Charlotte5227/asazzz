@@ -1,34 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
-		<OutputType>Exe</OutputType>
-		<RootNamespace>MauiGithubActionsSample</RootNamespace>
-		<UseMaui>true</UseMaui>
-		<SingleProject>true</SingleProject>
-		<ImplicitUsings>enable</ImplicitUsings>
+<PropertyGroup>
+  <!-- Androidのみ（まずAPKを確実に出す） -->
+  <TargetFramework>net8.0-android</TargetFramework>
 
-		<!-- Display name -->
-		<ApplicationTitle>MauiGithubActionsSample</ApplicationTitle>
+  <OutputType>Exe</OutputType>
+  <RootNamespace>MauiGithubActionsSample</RootNamespace>
+  <UseMaui>true</UseMaui>
+  <SingleProject>true</SingleProject>
+  <ImplicitUsings>enable</ImplicitUsings>
 
-		<!-- App Identifier -->
-		<ApplicationId>com.companyname.mauigithubactionssample</ApplicationId>
-		<ApplicationIdGuid>D4D30B4B-070A-40F2-90AE-B068FB7D1720</ApplicationIdGuid>
+  <!-- Display name -->
+  <ApplicationTitle>MauiGithubActionsSample</ApplicationTitle>
 
-		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+  <!-- App Identifier -->
+  <ApplicationId>com.companyname.mauigithubactionssample</ApplicationId>
+  <ApplicationIdGuid>D4D30B4B-070A-40F2-90AE-B068FB7D1720</ApplicationIdGuid>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-	</PropertyGroup>
+  <!-- Versions -->
+  <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+  <ApplicationVersion>1</ApplicationVersion>
+
+  <!-- Androidの最低バージョン -->
+  <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
