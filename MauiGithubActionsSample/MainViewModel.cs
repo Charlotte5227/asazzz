@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WarRandomApp;
+namespace MauiGithubActionsSample;
 
 public sealed class MainViewModel : INotifyPropertyChanged
 {
