@@ -23,6 +23,9 @@
 
   <!-- Androidの最低バージョン -->
   <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+
+　<Nullable>enable</Nullable>
+
 </PropertyGroup>
 
 	<ItemGroup>
