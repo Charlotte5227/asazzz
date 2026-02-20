@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WarRandomApp.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:WarRandomApp"
+    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}">
+
+    <ContentPage.BindingContext>
+        <local:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*,*,Auto" ColumnDefinitions="*,*"
+          Padding="12" RowSpacing="10" ColumnSpacing="10">
+
+        <!-- Top controls (full width) -->
+        <Frame Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="12" Padding="12">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="軍事力・経済力 乱数アプリ（.NET MAUI）" FontSize="18" FontAttributes="Bold" />
+
+                <Grid ColumnDefinitions="Auto,120,Auto,Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="8">
+                    <Label Grid.Row="0" Grid.Column="0" Text="日数（=処理回数）" VerticalTextAlignment="Center" />
+                    <Entry Grid.Row="0" Grid.Column="1" Keyboard="Numeric"
+                           Text="{Binding Days}" />
+
+                    <CheckBox Grid.Row="0" Grid.Column="2" IsChecked="{Binding SyncME}" VerticalOptions="Center" />
+                    <Label Grid.Row="0" Grid.Column="3" Text="軍事Y↔経済Y 同期（同番号・同日）" VerticalTextAlignment="Center" />
+
+                    <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding SyncAllSlots}" VerticalOptions="Center" />
+                    <Label Grid.Row="1" Grid.Column="3" Text="全スロット同期（同じ日なら全部同じY）" VerticalTextAlignment="Center" />
+
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Button Text="🎲 生成" Clicked="OnGenerateClicked" />
+                    <Button Text="➕ 合算" Clicked="OnSumClicked" />
+                    <Button Text="🧹 結果リセット" Clicked="OnResetClicked" />
+                </Grid>
+
+                <Label Text="増加式：X + (|X|×Y%) ／ Yは小数OK ／ 最終値は四捨五入（整数）"
+                       Opacity="0.7" FontSize="12"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Left: Slots -->
+        <Frame Grid.Row="1" Grid.Column="0" CornerRadius="12" Padding="10">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="スロット欄" FontAttributes="Bold" FontSize="16"/>
+
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+                    <Button Text="＋軍事" Clicked="OnAddMilitarySlot" />
+                    <Button Text="＋経済" Clicked="OnAddEconomySlot" />
+                    <Button Text="軍事削除" Clicked="OnRemoveMilitarySlot" />
+                    <Button Text="経済削除" Clicked="OnRemoveEconomySlot" />
+                </Grid>
+
+                <ScrollView>
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="【軍事】" FontAttributes="Bold" />
+                        <CollectionView ItemsSource="{Binding MilitarySlots}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame CornerRadius="10" Padding="10">
+                                        <Grid ColumnDefinitions="Auto,90,Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="6">
+                                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Title}" FontAttributes="Bold"/>
+
+                                            <Label Grid.Row="0" Grid.Column="1" Text="最大値" VerticalTextAlignment="Center"/>
+                                            <Entry Grid.Row="0" Grid.Column="1" Margin="52,0,0,0"
+                                                   WidthRequest="90" Keyboard="Numeric"
+                                                   Text="{Binding MaxValue}" />
+
+                                            <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="4" Spacing="18">
+                                                <HorizontalStackLayout Spacing="6">
+                                                    <CheckBox IsChecked="{Binding UseSign}" />
+                                                    <Label Text="増減判定ON（OFFなら＋のみ）" VerticalTextAlignment="Center"/>
+                                                </HorizontalStackLayout>
+                                                <HorizontalStackLayout Spacing="6">
+                                                    <CheckBox IsChecked="{Binding UseIncrease}" />
+                                                    <Label Text="増加ON（Y適用）" VerticalTextAlignment="Center"/>
+                                                </HorizontalStackLayout>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Label Text="【経済】" FontAttributes="Bold" />
+                        <CollectionView ItemsSource="{Binding EconomySlots}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame CornerRadius="10" Padding="10">
+                                        <Grid ColumnDefinitions="Auto,90,Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="6">
+                                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Title}" FontAttributes="Bold"/>
+
+                                            <Label Grid.Row="0" Grid.Column="1" Text="最大値" VerticalTextAlignment="Center"/>
+                                            <Entry Grid.Row="0" Grid.Column="1" Margin="52,0,0,0"
+                                                   WidthRequest="90" Keyboard="Numeric"
+                                                   Text="{Binding MaxValue}" />
+
+                                            <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="4" Spacing="18">
+                                                <HorizontalStackLayout Spacing="6">
+                                                    <CheckBox IsChecked="{Binding UseSign}" />
+                                                    <Label Text="増減判定ON（OFFなら＋のみ）" VerticalTextAlignment="Center"/>
+                                                </HorizontalStackLayout>
+                                                <HorizontalStackLayout Spacing="6">
+                                                    <CheckBox IsChecked="{Binding UseIncrease}" />
+                                                    <Label Text="増加ON（Y適用）" VerticalTextAlignment="Center"/>
+                                                </HorizontalStackLayout>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Right: Results -->
+        <Frame Grid.Row="1" Grid.Column="1" CornerRadius="12" Padding="10">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="結果欄（縦持ち向け：日ごとのカード）" FontAttributes="Bold" FontSize="16"/>
+
+                <CollectionView ItemsSource="{Binding Results}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="12" Padding="12">
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Text="{Binding Day, StringFormat='{0}日目'}" FontAttributes="Bold" />
+
+                                    <Label Text="軍事（各枠）" Opacity="0.7" FontSize="12"/>
+                                    <Label Text="{Binding MilitaryText}" />
+
+                                    <Label Text="経済（各枠）" Opacity="0.7" FontSize="12"/>
+                                    <Label Text="{Binding EconomyText}" />
+
+                                    <Label Text="{Binding MilitarySum, StringFormat='軍事合計: {0}'}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding EconomySum, StringFormat='経済合計: {0}'}" FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Y input area (full width) -->
+        <Frame Grid.Row="2" Grid.ColumnSpan="2" CornerRadius="12" Padding="10">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="増加率Y[%] 入力（横：1日目→2日目→…）" FontAttributes="Bold" FontSize="16"/>
+
+                <!-- “擬似タブ” -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button x:Name="TabMil" Text="軍事Y[%]" Clicked="OnTabMil" />
+                    <Button x:Name="TabEco" Text="経済Y[%]" Clicked="OnTabEco" />
+                </Grid>
+
+                <!-- Military Y -->
+                <ContentView x:Name="MilPanel">
+                    <ScrollView Orientation="Vertical">
+                        <VerticalStackLayout Spacing="10">
+                            <CollectionView ItemsSource="{Binding MilitarySlots}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame CornerRadius="12" Padding="10">
+                                            <VerticalStackLayout Spacing="6">
+                                                <Label Text="{Binding Title}" FontAttributes="Bold"/>
+                                                <ScrollView Orientation="Horizontal">
+                                                    <HorizontalStackLayout Spacing="8">
+                                                        <CollectionView ItemsSource="{Binding YCells}"
+                                                                        ItemsLayout="HorizontalList"
+                                                                        SelectionMode="None">
+                                                            <CollectionView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Frame CornerRadius="10" Padding="6">
+                                                                        <VerticalStackLayout Spacing="4">
+                                                                            <Label Text="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=ItemsSource.Count}"
+                                                                                   IsVisible="False"/>
+                                                                            <Entry Keyboard="Numeric" WidthRequest="90"
+                                                                                   Text="{Binding Value}" />
+                                                                        </VerticalStackLayout>
+                                                                    </Frame>
+                                                                </DataTemplate>
+                                                            </CollectionView.ItemTemplate>
+                                                        </CollectionView>
+                                                    </HorizontalStackLayout>
+                                                </ScrollView>
+                                                <Label Text="（左から 1日目, 2日目, 3日目...）" Opacity="0.6" FontSize="12"/>
+                                            </VerticalStackLayout>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </ContentView>
+
+                <!-- Economy Y -->
+                <ContentView x:Name="EcoPanel" IsVisible="False">
+                    <ScrollView Orientation="Vertical">
+                        <VerticalStackLayout Spacing="10">
+                            <CollectionView ItemsSource="{Binding EconomySlots}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame CornerRadius="12" Padding="10">
+                                            <VerticalStackLayout Spacing="6">
+                                                <Label Text="{Binding Title}" FontAttributes="Bold"/>
+                                                <ScrollView Orientation="Horizontal">
+                                                    <HorizontalStackLayout Spacing="8">
+                                                        <CollectionView ItemsSource="{Binding YCells}"
+                                                                        ItemsLayout="HorizontalList"
+                                                                        SelectionMode="None">
+                                                            <CollectionView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Frame CornerRadius="10" Padding="6">
+                                                                        <Entry Keyboard="Numeric" WidthRequest="90"
+                                                                               Text="{Binding Value}" />
+                                                                    </Frame>
+                                                                </DataTemplate>
+                                                            </CollectionView.ItemTemplate>
+                                                        </CollectionView>
+                                                    </HorizontalStackLayout>
+                                                </ScrollView>
+                                                <Label Text="（左から 1日目, 2日目, 3日目...）" Opacity="0.6" FontSize="12"/>
+                                            </VerticalStackLayout>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </ContentView>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Sum area -->
+        <Frame Grid.Row="3" Grid.ColumnSpan="2" CornerRadius="12" Padding="12">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="合算結果表示欄（軍事合計 / 経済合計）" FontAttributes="Bold" FontSize="16"/>
+
+                <Grid ColumnDefinitions="Auto,120,Auto,120" ColumnSpacing="12" RowSpacing="8">
+                    <Label Text="軍事 初期値" VerticalTextAlignment="Center"/>
+                    <Entry Text="{Binding InitMilitary}" Keyboard="Numeric" />
+
+                    <Label Text="経済 初期値" VerticalTextAlignment="Center"/>
+                    <Entry Text="{Binding InitEconomy}" Keyboard="Numeric" />
+                </Grid>
+
+                <Label Text="{Binding SumText}" FontSize="14" FontAttributes="Bold"/>
+            </VerticalStackLayout>
+        </Frame>
+
+    </Grid>
+</ContentPage>
